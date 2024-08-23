@@ -101,8 +101,8 @@ private: 'Esta función sólo funciona en chats privados',
 wait: '`Cargando...`'
 }
 
-const link = 'https://whatsapp.com/channel/0029VaB4w2ZFHWpwgyEe3w2k'
-const fotos = 'https://qu.ax/lFTW.jpeg'
+const link = ''
+const fotos = 'https://telegra.ph/file/2e0f4b198190a6a9dfae1.jpg'
 const Title = wm
 const Body = 'Zam'
 
@@ -357,10 +357,10 @@ break
 
 case 'sc': case 'script': case 'git': {
 try {
-let res = await fetch('https://api.github.com/repos/AzamiJs/CuriosityBot-MD')
+let res = await fetch('')
 let json = await res.json()
 let git = `*乂  Bot  -  Script*\n\n· *Nombre*: ${json.name}\n· *Visitantes*: ${json.watchers_count}\n· *Peso*: ${(json.size / 1024).toFixed(2)} MB\n· *Actualizado*: ${moment(json.updated_at).format('DD/MM/YY - HH:mm:ss')}\n· *Url* : ${json.html_url}\n\n	   ${json.forks_count} Forks · ${json.stargazers_count} Stars · ${json.open_issues_count} Issues`
-await client.sendMessage(m.chat, {text: git, contextInfo: { forwardingScore: 999, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterName: 'CuriosityBot', newsletterJid: "120363167110224268@newsletter", }, externalAdReply: { title: `© CuriosityBot-MD`, body: '', thumbnailUrl: 'https://qu.ax/lFTW.jpeg', sourceUrl: 'https://github.com/AzamiJs', mediaType: 1, renderLargerThumbnail: true }}}, {quoted: fkontak})
+await client.sendMessage(m.chat, {text: git, contextInfo: { forwardingScore: 999, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterName: 'MCqueenBot', newsletterJid: "120363167110224268@newsletter", }, externalAdReply: { title: `© MCqueenBot-MD`, body: '', thumbnailUrl: 'https://telegra.ph/file/2e0f4b198190a6a9dfae1.jpg', sourceUrl: '', mediaType: 1, renderLargerThumbnail: true }}}, {quoted: fkontak})
 } catch (e) {
 m.reply(e)
 }
@@ -551,30 +551,6 @@ console.error(e)
 }
 break
 
-case 'gitclone': {
-const fetch = require('node-fetch')
-
-if (!args[0]) {
-return m.reply('Ingrese el enlace de un *repositorio* de *GitHub*\n\n`Ejemplo`: .gitclone https://github.com/AzamiJs/CuriosityBot-MD')
-}
-if (!args[0].includes('github.com')) {
-return m.reply('Enlace no válido. Compruebe el enlace')
-}
-
-m.reply(mess.wait)
-
-try {
-let regex1 = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
-let [, user, repo] = args[0].match(regex1) || []
-repo = repo.replace(/.git$/, '')
-let urlGit = `https://api.github.com/repos/${user}/${repo}/zipball`
-let filename = (await fetch(urlGit, { method: 'HEAD' })).headers.get('content-disposition').match(/attachment; filename=(.*)/)[1]
-client.sendMessage(m.chat, { document: { url: urlGit }, fileName: filename+'.zip', mimetype: 'application/zip' }, { quoted: m }).catch((err) => m.reply('Ha ocurrido un error al intentar descargar sus archivos: ' + err))
-} catch (e) {
-return m.reply('Ha ocurrido un error al intentar descargar sus archivos: ' + e) 
-}
-}
-break
 
 case 'tiktok': {
 if (!text) {
@@ -1021,14 +997,32 @@ if (!isAdmins) {
 return m.reply(mess.admin)
 }
 
-let teks = `🚩 *Cluster - TagAll*\n\n`
-teks += `Mensaje: ${q ? q : `Sin mensaje`}\n\n`
-for (let mem of participants) {
-teks += `- @${mem.id.split('@')[0]}\n`
-}
-client.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
-}
-break 
+const handler = async (m, {isOwner, isAdmin, conn, text, participants, args, command}) => {
+  if (!(isAdmin || isOwner)) {
+    global.dfail('admin', m, conn);
+    throw false;
+    var sum = member.length;
+  } else {
+    var sum = 0;
+    const total = 0;
+    var member = 0;
+  }
+  const pesan = args.join``;
+  const oi = `${pesan}`;
+  let teks = `╭─────────\n│❏ 𝙎𝙋𝙄𝘿𝙀𝙍 𝘽𝙊𝙏 \n│❏ 𝗠𝗶𝗲𝗺𝗯𝗿𝗼𝘀 : *${participants.length}* ${oi}\n│🥷🏻 𝘼𝘾𝙏𝙄𝙑𝘼𝙏𝙀 𝙈𝘼𝙉𝘾@\n│\n`;
+  for (const mem of participants) {
+    teks += `│🥷🏻 @${mem.id.split('@')[0]}\n`;
+  }
+  teks += `│\n╰𝙎𝙋𝙄𝘿𝙀𝙍 𝘽𝙊𝙏 `;
+  conn.sendMessage(m.chat, {text: teks, mentions: participants.map((a) => a.id)} );
+};
+handler.help = ['tagall <mesaje>', 'invocar <mesaje>'];
+handler.tags = ['group'];
+handler.command = /^(tagall|invocar|marcar|todos|invocación|ta)$/i;
+handler.admin = true;
+handler.group = true;
+export default handler;
+
 		
 case 'yts':
 case 'ytsearch': {
@@ -1165,12 +1159,12 @@ const locale = 'es-ES'
 const dias = d.toLocaleDateString(locale, {weekday: 'long'})
 const fecha = d.toLocaleDateString(locale, {day: '2-digit', month: '2-digit', year: 'numeric'})
 
-let sticker2 = `${wm}\nAutor:\nFecha:\nDía:\nCreador:`
-let sticker3 = `${vs}\n${pushname}\n${fecha}\n${dias}\nZam`
+let sticker2 = `PROYECTO R,A`
+let sticker3 = `PROYECTO R,A`
 
 if (/image/.test(mime)) {
 media = await quoted.download()  
-let encmedia = await client.sendImageAsSticker(m.chat, media, m, { packname: sticker2, author: sticker3, contextInfo: {forwardingScore: 9999999, isForwarded: true, externalAdReply:{ showAdAttribution: false, title: wm, mediaType: 2, sourceUrl: 'https://github.com/AzamiJs', thumbnailUrl: 'https://qu.ax/lFTW.jpeg'}}})
+let encmedia = await client.sendImageAsSticker(m.chat, media, m, { packname: sticker2, author: sticker3, contextInfo: {forwardingScore: 9999999, isForwarded: true, externalAdReply:{ showAdAttribution: false, title: wm, mediaType: 2, sourceUrl: '', thumbnailUrl: ''}}})
 await fs.unlinkSync(encmedia)  
 } else if (/video/.test(mime)) {
 if ((quoted.msg || quoted).seconds > 20) {
@@ -1178,7 +1172,7 @@ return m.reply('El video no puede ser muy largo')
 }
 media = await quoted.download()
 
-let encmedia = await client.sendVideoAsSticker(m.chat, media, m, { packname: sticker2, author: sticker3, contextInfo: {forwardingScore: 9999999, isForwarded: true, externalAdReply:{ showAdAttribution: false, title: wm, mediaType: 2, sourceUrl: 'https://github.com/AzamiJs', thumbnailUrl: 'https://qu.ax/lFTW.jpeg'}}})
+let encmedia = await client.sendVideoAsSticker(m.chat, media, m, { packname: sticker2, author: sticker3, contextInfo: {forwardingScore: 9999999, isForwarded: true, externalAdReply:{ showAdAttribution: false, title: wm, mediaType: 2, sourceUrl: '', thumbnailUrl: ''}}})
 await new Promise((resolve) => setTimeout(resolve, 2000))
 await fs.unlinkSync(encmedia)  
 } else {
